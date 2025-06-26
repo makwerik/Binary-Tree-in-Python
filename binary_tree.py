@@ -1,9 +1,9 @@
-
 from typing import Optional
 
 
 class Node:
     """Узел дерева"""
+
     def __init__(self, value: int):
         """
         :param value: Значение, которое хранит узел.
@@ -16,6 +16,7 @@ class Node:
 
 class Tree:
     """Дерево-деревушко"""
+
     def __init__(self):
         # Корень дерева (изначально пуст)
         self.root: Optional[Node] = None
@@ -59,3 +60,33 @@ class Tree:
         # (которым является текущим узлом)
         else:
             self._insert_recursive(current_node=self.root, value=value)
+
+    def search(self, value: int) -> bool:
+        """Метод для поиска значения в дереве"""
+        # Если корень пуст, возвращаем False
+        if self.root is None:
+            return False
+        else:
+            return self._search_recursive(current_node=self.root, value=value)
+
+    def _search_recursive(self, current_node: Node, value: int) -> bool:
+        """Рекурсивный метод поиска значения"""
+
+        # Если значение текущего узла равно искомому
+        if current_node.value == value:
+            return True
+        # Если текущее значение < значения в узле - идём влево
+        elif value < current_node.value:
+            # Если узла нет, возвращаем False
+            if current_node.left is None:
+                return False
+            # Иначе ищем дальше
+            else:
+                return self._search_recursive(current_node=current_node.left, value=value)
+        else:
+            # Иначе идём вправо
+            if current_node.right is None:
+                return False
+            else:
+                # return обязателен, чтобы результат возвращался из глубины наверх, иначе он потеряется
+                return self._search_recursive(current_node=current_node.right, value=value)
