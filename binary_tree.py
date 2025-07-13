@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 
 
 class Node:
@@ -90,3 +90,50 @@ class Tree:
             else:
                 # return обязателен, чтобы результат возвращался из глубины наверх, иначе он потеряется
                 return self._search_recursive(current_node=current_node.right, value=value)
+
+    def in_order(self) -> List[int]:
+        """Метод обхода дерева"""
+        # Создаём пустой список
+        result: List[int] = []
+        # Передаю пустой список в рекурсивный метод
+        # Так как списки - изменяемые объекты, то в рекурсии он наполнится нужными значениями
+        # (потому что этот список не копируется, а указывает на одну область памяти)
+        self._in_order_recursive(current_node=self.root, result=result)
+        return result
+
+
+    def _in_order_recursive(self, current_node: Node, result: List[int]) -> None:
+        """
+        Рекурсивный метод для обхода дерева In-order (лево-корень-право)
+
+        :param current_node: Текущий узел.
+
+        :param result: Список чисел
+
+        :return:
+        """
+
+        # Если узел пустой
+        if current_node is None:
+            return None
+
+        # Обходим левое поддерево
+        if current_node.left:
+            # return не использую, чтобы пройти все ветки
+            self._in_order_recursive(current_node=current_node.left, result=result)
+
+        # Добавляем значение
+        result.append(current_node.value)
+
+        # Обходим правое поддерево
+        if current_node.right:
+            self._in_order_recursive(current_node=current_node.right, result=result)
+
+
+
+if __name__ == '__main__':
+    tree = Tree()
+    tree.insert(value=15)
+    tree.insert(value=13)
+    tree.insert(value=20)
+    print(tree.in_order())
